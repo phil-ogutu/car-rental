@@ -29,7 +29,7 @@ This is a simple Car Rental System built with Python, SQLAlchemy, and SQLite. Th
 
 ```bash
 git clone https://github.com/phil-ogutu/car-rental.git
-cd car-rental-system
+cd car-rental
 ```
 
 ### 2️⃣ Create and run the virtual environment
@@ -44,7 +44,7 @@ python lib/main.py
 ```
 
 ## Example Usage 📖
-```
+```plaintext
 Welcome to the Car Rental System
 1. Add a new customer
 2. Add a new car
