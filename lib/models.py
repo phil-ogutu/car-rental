@@ -1,4 +1,4 @@
-from sqlalchemy import (Column, Integer, String, DateTime, create_engine, ForeignKey)
+from sqlalchemy import (Column, Integer, String, DateTime, Boolean, ForeignKey)
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 
 Base = declarative_base()
@@ -18,6 +18,7 @@ class Car(Base):
     make = Column(String())
     model = Column(String())
     price_per_day = Column(Integer())
+    available = Column(Boolean, default=True)
 
     rentals = relationship("Rental", back_populates="car")
 
