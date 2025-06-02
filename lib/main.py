@@ -51,7 +51,7 @@ def rent_car():
     start_date = datetime.strptime(input("Enter start date (YYYY-MM-DD): "), "%Y-%m-%d").date()
     end_date = datetime.strptime(input("Enter end date (YYYY-MM-DD): "), "%Y-%m-%d").date()
 
-    car = session.query(Car).get(car_id)
+    car = session.get(Car, car_id)
     if not car or not car.available:
         print("Car not available")
         return
