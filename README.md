@@ -46,14 +46,13 @@ python lib/main.py
 ## Example Usage 📖
 ```plaintext
 Welcome to the Car Rental System
-1. Add a new customer
-2. Add a new car
-3. View all cars
-4. View available cars
-5. Create a rental
-6. View all rentals
-7. View rentals by customer
+1. Car Management
+2. Customer Management
+3. Rent a Car
+4. List Rented Cars
+5. Update Rental
 0. Exit
+
 Choose an option:
 ```
 
