@@ -45,18 +45,22 @@ def delete_car():
         session.commit()
         print("Car deleted")
     else:
-        print("Customer not found")
+        print("Car not found")
 
 def update_car():
     id = int(input("Enter car ID to update: "))
     car = session.get(Car, id)
     if car:
-        new_name = input("Enter new name: ")
-        car.name = new_name
+        new_make = input("Enter new make: ")
+        new_model = input("Enter new model: ")
+        new_price_per_day = input("Enter new hire price: ")
+        car.make = new_make
+        car.model = new_model
+        car.price_per_day = new_price_per_day
         session.commit()
-        print("Car updated.")
+        print("Car updated")
     else:
-        print("Car not found.")
+        print("Car not found")
 
 def list_customers():
     customers = session.query(Customer).all()
@@ -83,9 +87,9 @@ def update_customer():
         new_name = input("Enter new name: ")
         customer.name = new_name
         session.commit()
-        print("Car updated.")
+        print("Customer updated")
     else:
-        print("Car not found.")
+        print("Car not found")
 
 def rent_car():
     list_customers()
@@ -100,7 +104,7 @@ def rent_car():
         print("Car not available")
         return
     
-    rental = Rental(customer_id=customer_id, car_id=car_id, start_date=start_date, end_date=end_date, status="Cofirmed")
+    rental = Rental(customer_id=customer_id, car_id=car_id, start_date=start_date, end_date=end_date)
     session.add(rental)
     car.available = False
     session.commit()
@@ -110,8 +114,32 @@ def list_rentals():
     print("Rentals:")
     for rental in rentals:
         print(f"Rental ID: {rental.id} | Customer: {rental.customer.name} | Car: {rental.car.make} {rental.car.model} | "
-              f"{rental.start_date.date()} to {rental.end_date.date()} Status: {rental.status}")
+              f"{rental.start_date.date()} to {rental.end_date.date()} ")
     print()
+
+def update_rental():
+    list_rentals()
+    id=int(input("Select rental to update by ID: "))
+    rental = session.get(Rental, id)
+    if rental:
+        list_cars(available=True)
+        new_car_id = int(input("Enter new car ID: "))
+        new_start_date = datetime.strptime(input("Enter new start date (YYYY-MM-DD): "), "%Y-%m-%d").date()
+        new_end_date = datetime.strptime(input("Enter new end date (YYYY-MM-DD): "), "%Y-%m-%d").date()
+
+        new_car = session.get(Car, new_car_id)
+        if not new_car:
+            print("Car not found")
+            return
+
+        old_car = session.get(Car, rental.car_id)
+        old_car.available = True
+
+        rental.start_date = new_start_date
+        rental.end_date = new_end_date
+        rental.car_id = new_car_id
+        new_car.available = False
+        session.commit()
 
 def car_management():
     while True:
@@ -121,8 +149,10 @@ def car_management():
         print("3. Delete Car")
         print("4. List Cars")
         print("0. Back to Main Menu")
+        print()
 
-        choice = input("Choose an option:")
+        choice = input("Choose an option: ")
+        print()
         if choice == '1':
             add_car()
         if choice == '2':
@@ -142,8 +172,10 @@ def customer_management():
         print("3. Delete Customer")
         print("4. List Customers")
         print("0. Back to Main Menu")
+        print()
 
         choice = input("Choose an option:")
+        print()
         if choice == '1':
             add_customer()
         if choice == '2':
@@ -157,15 +189,18 @@ def customer_management():
 
 def main():
     while True:
+        print()
         print("Welcome to the Car Rental System")
         print("1. Car Management")
         print("2. Customer Management")
         print("3. Rent a Car")
         print("4. List Rented Cars")
+        print("5. Update Rental")
         print("0. Exit")
+        print()
+        
         choice = input("Choose an option: ")
-
-
+        print()
         if choice == '1':
             car_management()
         if choice == '2':
@@ -174,6 +209,8 @@ def main():
             rent_car()
         if choice == '4':
             list_rentals()
+        if choice == '5':
+            update_rental()
         if choice == '0':
             print("Goodbye")
             break

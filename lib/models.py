@@ -31,7 +31,6 @@ class Rental(Base):
     car_id = Column(Integer, ForeignKey("cars.id"))
     start_date = Column(DateTime)
     end_date = Column(DateTime)
-    status = Column(String())
 
     customer = relationship("Customer", back_populates="rentals")
     car = relationship("Car", back_populates="rentals")
