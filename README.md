@@ -9,7 +9,7 @@ This is a simple Car Rental System built with Python, SQLAlchemy, and SQLite. Th
 ✅ Add and manage customers  
 ✅ Add and manage cars  
 ✅ View available cars for rent  
-✅ Create rentals 
+✅ Create rentals  
 ✅ View all rentals  
 ✅ View rentals by customer  
 
