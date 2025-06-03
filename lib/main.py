@@ -9,13 +9,6 @@ Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 session = Session()
 
-def add_customer():
-    name = input("Enter customer name: ")
-    customer = Customer(name=name)
-    session.add(customer)
-    session.commit()
-    print(f"Customer {name} added.\n")
-
 def add_car():
     make = input("Enter car make: ")
     model = input("Enter car model: ")
@@ -24,6 +17,8 @@ def add_car():
     session.add(car)
     session.commit()
     print(f"Car {make} {model} added.\n")
+    print()
+    list_cars()
 
 def list_cars(available=False):
     if available:
@@ -48,19 +43,31 @@ def delete_car():
         print("Car not found")
 
 def update_car():
+    list_cars()
     id = int(input("Enter car ID to update: "))
     car = session.get(Car, id)
     if car:
-        new_make = input("Enter new make: ")
-        new_model = input("Enter new model: ")
-        new_price_per_day = input("Enter new hire price: ")
+        new_make = input("Enter new make: ") or car.make
+        new_model = input("Enter new model: ") or car.model
+        new_price_per_day = input("Enter new hire price: ") or car.price_per_day
         car.make = new_make
         car.model = new_model
         car.price_per_day = new_price_per_day
         session.commit()
         print("Car updated")
+        print()
+        list_cars()
     else:
         print("Car not found")
+
+def add_customer():
+    name = input("Enter customer name: ")
+    customer = Customer(name=name)
+    session.add(customer)
+    session.commit()
+    print(f"Customer {name} added.\n")
+    print()
+    list_customers()
 
 def list_customers():
     customers = session.query(Customer).all()
@@ -81,6 +88,7 @@ def delete_customer():
         print("Customer not found")
 
 def update_customer():
+    list_customers()
     id = int(input("Enter customer ID to update: "))
     customer = session.get(Customer, id)
     if customer:
@@ -96,8 +104,9 @@ def rent_car():
     customer_id = int(input("Select customer by ID: "))
     list_cars(available=True)
     car_id = int(input("Select car by ID:"))
-    start_date = datetime.strptime(input("Enter start date (YYYY-MM-DD): "), "%Y-%m-%d").date()
-    end_date = datetime.strptime(input("Enter end date (YYYY-MM-DD): "), "%Y-%m-%d").date()
+    start_date = datetime.strptime(input("Enter start date (DD-MM-YYYY): "), "%d-%m-%Y").date()
+    end_date = datetime.strptime(input("Enter end date (DD-MM-YYYY): "), "%d-%m-%Y").date()
+    print()
 
     car = session.get(Car, car_id)
     if not car or not car.available:
@@ -108,6 +117,7 @@ def rent_car():
     session.add(rental)
     car.available = False
     session.commit()
+    list_rentals()
 
 def list_rentals():
     rentals = session.query(Rental).all()
@@ -124,8 +134,8 @@ def update_rental():
     if rental:
         list_cars(available=True)
         new_car_id = int(input("Enter new car ID: "))
-        new_start_date = datetime.strptime(input("Enter new start date (YYYY-MM-DD): "), "%Y-%m-%d").date()
-        new_end_date = datetime.strptime(input("Enter new end date (YYYY-MM-DD): "), "%Y-%m-%d").date()
+        new_start_date = datetime.strptime(input("Enter new start date (DD-MM-YYYY): "), "%d-%m-%Y").date()
+        new_end_date = datetime.strptime(input("Enter new end date (DD-MM-YYYY): "), "%d-%m-%Y").date()
 
         new_car = session.get(Car, new_car_id)
         if not new_car:
@@ -140,6 +150,7 @@ def update_rental():
         rental.car_id = new_car_id
         new_car.available = False
         session.commit()
+        list_rentals()
 
 def car_management():
     while True:
