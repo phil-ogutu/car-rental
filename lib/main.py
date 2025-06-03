@@ -36,12 +36,56 @@ def list_cars(available=False):
         print(f"{car.id} | {car.make} {car.model} _______ Hire Price: {car.price_per_day}/day")
     print()
 
+def delete_car():
+    list_cars()
+    id = int(input("Enter car ID:"))
+    car = session.get(Car, id)
+    if car:
+        session.delete(car)
+        session.commit()
+        print("Car deleted")
+    else:
+        print("Customer not found")
+
+def update_car():
+    id = int(input("Enter car ID to update: "))
+    car = session.get(Car, id)
+    if car:
+        new_name = input("Enter new name: ")
+        car.name = new_name
+        session.commit()
+        print("Car updated.")
+    else:
+        print("Car not found.")
+
 def list_customers():
     customers = session.query(Customer).all()
     print("Customers:")
     for customer in customers:
         print(f"ID: {customer.id} | Name: {customer.name}")
     print()
+
+def delete_customer():
+    list_customers()
+    id = int(input("Enter customer ID:"))
+    customer = session.get(Customer, id)
+    if customer:
+        session.delete(customer)
+        session.commit()
+        print("Customer deleted")
+    else:
+        print("Customer not found")
+
+def update_customer():
+    id = int(input("Enter customer ID to update: "))
+    customer = session.get(Customer, id)
+    if customer:
+        new_name = input("Enter new name: ")
+        customer.name = new_name
+        session.commit()
+        print("Car updated.")
+    else:
+        print("Car not found.")
 
 def rent_car():
     list_customers()
@@ -69,31 +113,66 @@ def list_rentals():
               f"{rental.start_date.date()} to {rental.end_date.date()} Status: {rental.status}")
     print()
 
+def car_management():
+    while True:
+        print("Car Management")
+        print("1. Add Car")
+        print("2. Update Car")
+        print("3. Delete Car")
+        print("4. List Cars")
+        print("0. Back to Main Menu")
+
+        choice = input("Choose an option:")
+        if choice == '1':
+            add_car()
+        if choice == '2':
+            update_car()
+        if choice == '3':
+            delete_car()
+        if choice == '4':
+            list_cars()
+        if choice == '0':
+            break
+
+def customer_management():
+    while True:
+        print("Customer Management")
+        print("1. Add Customer")
+        print("2. Update Customer")
+        print("3. Delete Customer")
+        print("4. List Customers")
+        print("0. Back to Main Menu")
+
+        choice = input("Choose an option:")
+        if choice == '1':
+            add_customer()
+        if choice == '2':
+            update_customer()
+        if choice == '3':
+            delete_customer()
+        if choice == '4':
+            list_customers()
+        if choice == '0':
+            break
 
 def main():
     while True:
         print("Welcome to the Car Rental System")
-        print("1. Add a new customer")
-        print("2. Add a new car")
-        print("3. List Cars")
-        print("4. List Customers")
-        print("5. Rent a Car")
-        print("6. List Rented Cars")
+        print("1. Car Management")
+        print("2. Customer Management")
+        print("3. Rent a Car")
+        print("4. List Rented Cars")
         print("0. Exit")
         choice = input("Choose an option: ")
 
 
         if choice == '1':
-            add_customer()
+            car_management()
         if choice == '2':
-            add_car()
+            customer_management()
         if choice == '3':
-            list_cars()
-        if choice == '4':
-            list_customers()
-        if choice == '5':
             rent_car()
-        if choice == '6':
+        if choice == '4':
             list_rentals()
         if choice == '0':
             print("Goodbye")
